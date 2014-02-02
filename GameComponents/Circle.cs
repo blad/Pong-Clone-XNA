@@ -9,7 +9,7 @@ namespace WindowsGame1.GameComponents
 {
     class Circle : DrawableGameComponent
     {
-        int radius;
+        float radius;
         BasicEffect basicEffect;
         VertexPositionColor[] vertices;
 
@@ -58,11 +58,11 @@ namespace WindowsGame1.GameComponents
         }
 
 
-        public int XPos { get; set; }
+        public float XPos { get; set; }
 
-        public int YPos { get; set; }
+        public float YPos { get; set; }
 
-        public int Radius
+        public float Radius
         {
             set
             {

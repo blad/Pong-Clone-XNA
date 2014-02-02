@@ -18,6 +18,11 @@ namespace WindowsGame1
     public class Pong : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
+        SpriteFont _font;
+        SpriteBatch _spriteBatch;
+        PlayerPaddle _player;
+        Paddle _computer;
+
         public Pong()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -33,16 +38,16 @@ namespace WindowsGame1
         protected override void Initialize()
         {
             
-            PlayerPaddle player   = new PlayerPaddle(this, Color.White);
-            Paddle computer = new Paddle(this, Color.White);
-            Ball ball = new Ball(this, 10, player, computer);
+            _player   = new PlayerPaddle(this, Color.White);
+            _computer = new Paddle(this, Color.White);
+            Ball ball = new Ball(this, 10, _player, _computer);
 
-            computer.Ball = ball;
+            _computer.Ball = ball;
             
             base.Initialize();
             this.Components.Add(new Border(this, Color.DarkGray));
-            this.Components.Add(player);
-            this.Components.Add(computer);
+            this.Components.Add(_player);
+            this.Components.Add(_computer);
             this.Components.Add(ball);
             
         }
@@ -53,7 +58,8 @@ namespace WindowsGame1
         /// </summary>
         protected override void LoadContent()
         {
-         
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _font = Content.Load<SpriteFont>("CourierNewFont");
         }
 
         /// <summary>
@@ -77,6 +83,20 @@ namespace WindowsGame1
         {
             GraphicsDevice.Clear(new Color(0.1f,0.1f,0.1f));
             base.Draw(gameTime);
+
+            _spriteBatch.Begin();
+             // Draw Hello World
+            string output = _computer.Score +" "+ _player.Score;
+
+            // Find the center of the string
+            Vector2 FontOrigin = _font.MeasureString(output) / 2;
+            // Draw the string
+            _spriteBatch.DrawString(_font, output, 
+                new Vector2(Window.ClientBounds.Width/2, 20), 
+                Color.White,
+                0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
+
+            _spriteBatch.End();
         }
     }
 }

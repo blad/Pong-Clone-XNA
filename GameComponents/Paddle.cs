@@ -21,6 +21,7 @@ namespace WindowsGame1.GameComponents
         public int YPos { get { return shape.Y; } }
         public int Width { get { return shape.Width; } }
         public int Height { get { return shape.Height;  } }
+        public int Score { get; set; }
 
         public Ball Ball { get; set; }
 
@@ -35,9 +36,10 @@ namespace WindowsGame1.GameComponents
             texture.SetData(new Color[] { Color.White });
 
             // Create the shape
-            shape = new Rectangle(10, 0, 20, 200);
+            shape = new Rectangle(10, 0, 20, 150);
             direction = 1;
             rate = 2;
+            Score = 0;
         }
 
         public override void Update(GameTime gameTime)

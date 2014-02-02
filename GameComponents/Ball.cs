@@ -9,7 +9,7 @@ namespace WindowsGame1.GameComponents
 {
     class Ball : Circle
     {
-        int[] velocity;
+        Vector2 velocity;
         public PlayerPaddle Player { get; set; }
         public Paddle Computer { get; set; }
         
@@ -30,7 +30,7 @@ namespace WindowsGame1.GameComponents
         public override void Initialize()
         {
             base.Initialize();
-            velocity = new int[2]{3,3};
+            velocity = new Vector2(6, 6);
         }
 
 
@@ -38,25 +38,42 @@ namespace WindowsGame1.GameComponents
         {
             
             // Check for Collisions with the Paddles
-            if ((YPos >= Player.YPos && YPos <= Player.YPos + Player.Height) &&  (XPos + Radius >= Player.XPos))
-                velocity[0] *= -1;
+
+            // Collision with Left Paddle
+            if ((YPos >= Player.YPos && YPos <= Player.YPos + Player.Height) && (XPos + Radius >= Player.XPos))
+            {
+                XPos = Player.XPos - Radius;
+                velocity.X *= -1.1F;
+                velocity.Y += (((YPos + Radius) - (Player.YPos + (Player.Height / 2))) / (Player.Height / 2)) * 2;
+            }
 
             if ((YPos >= Computer.YPos && YPos <= Computer.YPos + Computer.Height) && (XPos - Radius <= Computer.XPos + Computer.Width))
-                velocity[0] *= -1;
+            {
+                XPos = Computer.XPos + Computer.Width + Radius;
+                velocity.X *= -1.1F;
+                velocity.Y += (((YPos + Radius) - (Computer.YPos + (Computer.Height / 2))) / (Computer.Height / 2))*2;
+            }
 
             // Check for Collisions with the Walls
             if (YPos - Radius < 0 || YPos + Radius > Game.Window.ClientBounds.Height)
-                velocity[1] *= -1;
+                velocity.Y *= -1F;
 
             // Reset if they touch the side walls.
             if (XPos < 0 || XPos + Radius > Game.Window.ClientBounds.Width)
             {
+                if (XPos < 0)
+                    Player.Score++;
+                else
+                    Computer.Score++;
+
                 XPos = Game.Window.ClientBounds.Width / 2 - Radius;
                 YPos = Game.Window.ClientBounds.Height / 2 - Radius;
+                velocity.X = 3;
+                velocity.Y = 0;
             }
-            
-            XPos += (int)velocity[0];
-            YPos += (int)velocity[1];
+
+            XPos += velocity.X;
+            YPos += velocity.Y;
 
             base.Update(gameTime);
         }
